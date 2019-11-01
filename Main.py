@@ -16,7 +16,7 @@ btn1 = tk.Button(top_frame, text="Sort Photos", bg="blue").pack()
 btn2 = tk.Button(top_frame, text="Find Twins", bg="blue").pack()
 btn3 = tk.Button(bottom_frame, text="404", fg="blue").pack(side="left")
 btn4 = tk.Button(bottom_frame, text="404", fg="blue").pack(side="left")
-root.
+root.xxx
 
 #root.mainloop()
 
