@@ -106,7 +106,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572710709324</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="complete overhaul with object oriented approach">
+      <created>1572749179749</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1572749179749</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -134,6 +141,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test git/github functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="test git/github functionality" />
+    <MESSAGE value="complete overhaul with object oriented approach" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete overhaul with object oriented approach" />
   </component>
 </project>
