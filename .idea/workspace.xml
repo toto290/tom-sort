@@ -113,7 +113,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572749179749</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added funcionality to switch between working modes&#10;includes working visualization">
+      <created>1572826713213</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1572826713213</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -142,6 +149,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test git/github functionality" />
     <MESSAGE value="complete overhaul with object oriented approach" />
-    <option name="LAST_COMMIT_MESSAGE" value="complete overhaul with object oriented approach" />
+    <MESSAGE value="added funcionality to switch between working modes&#10;includes working visualization" />
+    <option name="LAST_COMMIT_MESSAGE" value="added funcionality to switch between working modes&#10;includes working visualization" />
   </component>
 </project>

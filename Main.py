@@ -9,45 +9,73 @@ class MainApplication(tk.Frame):
         self.root = parent
         self.mode = tk.IntVar()
         self.mode.set(0)    # start:0 sort:1 twin:2
-        self.root.state('zoomed')
+        #self.root.state('zoomed')
+        self.root.geometry('1000x500')
         self.root.title(title)
 
         self.menu = Menu(self)
         self.status = Status(self.root)
 
-        self.frame_start = tk.Frame(self.root)
-        self.frame_sort = tk.Frame(self.root)
-        self.frame_twin = tk.Frame(self.root)
+        self.root.update()
+        root_width = self.root.winfo_width()
+        root_height = self.root.winfo_height()
+        print('Frame root is ' + str(root_width) + ' wide and ' + str(root_height) + ' high')
+        self.frame_start = FrameModeStart(self.root, width=root_width, height=root_height)
+        self.frame_sort = FrameModeSort(self.root, width=root_width, height=root_height)
+        self.frame_twin = FrameModeTwin(self.root, width=root_width, height=root_height)
         self.currentframe = self.frame_start
+        self.updateinterface()
 
     def updateinterface(self):
         print('updating interface - mode: ' + str(self.mode.get()))
-        if self.mode.get() == 1:
-            self.draw_mode_sort()
-            print('Drawn: SortingMode')
-        elif self.mode.get() == 2:
-            self.draw_mode_twin()
-            print('Drawn: TwinMode')
-
-    def switch_frames(self, newframe):
         self.currentframe.pack_forget()
-        self.currentframe = newframe
-        newframe.pack(side="bottom", fill="both", expand=True)
+        if self.mode.get() == 0:
+            self.frame_start.packit()
+            self.currentframe = self.frame_start
+        elif self.mode.get() == 1:
+            self.frame_sort.packit()
+            self.currentframe = self.frame_sort
+        elif self.mode.get() == 2:
+            self.frame_twin.packit()
+            self.currentframe = self.frame_twin
 
-    def draw_mode_sort(self):
-        self.switch_frames(self.frame_sort)
-        left_frame = tk.Frame(self.frame_sort, bg='blue', height=600, width=600)
-        left_frame.pack(side='left', expand='0')
-        right_frame = tk.Frame(self.frame_sort, bg='red', height=600, width=600)
-        right_frame.pack(side='right', expand='0')
 
-    def draw_mode_twin(self):
-        self.switch_frames(self.frame_twin)
-        self.frame_twin.pack(side="bottom", fill="both", expand=True)
-        left_frame = tk.Frame(self.frame_twin, bg='green', height=600, width=600)
-        left_frame.pack(side='left', expand='0')
-        right_frame = tk.Frame(self.frame_twin, bg='yellow', height=600, width=600)
-        right_frame.pack(side='right', expand='0')
+class FrameModeStart(tk.Frame):
+    def __init__(self, parent, width, height):
+        tk.Frame.__init__(self, parent, width=width, height=height)
+        self.root = parent
+
+    def packit(self):
+        self.pack(side="bottom", fill="both", expand=True)
+
+
+class FrameModeSort(tk.Frame):
+    def __init__(self, parent, width, height):
+        tk.Frame.__init__(self, parent, width=width, height=height)
+        self.root = parent
+        self.width = self.root.winfo_width()
+        self.height = self.root.winfo_height()
+        print('Frame ModeSorting is ' + str(self.width) + ' wide and ' + str(self.height) + ' high')
+        self.left_frame = tk.Frame(self, bg='blue', height=int(1 * self.height), width=int(0.7 * self.width))
+        self.right_frame = tk.Frame(self, bg='red', height=int(1 * self.height), width=int(0.3 * self.width))
+        self.left_frame.pack(side='left', expand='1')
+        self.right_frame.pack(side='right', expand='1')
+
+    def packit(self):
+        print('Packed: SortingMode')
+        self.pack(side="bottom", fill="both", expand=True)
+
+
+class FrameModeTwin(tk.Frame):
+    def __init__(self, parent, width, height):
+        tk.Frame.__init__(self, parent, width=width, height=height)
+        self.root = parent
+        left_frame = tk.Frame(self, bg='green', height=600, width=600)
+        right_frame = tk.Frame(self, bg='yellow', height=600, width=600)
+
+    def packit(self):
+        self.pack(side="bottom", fill="both", expand=True)
+
 
 
 class Menu(tk.Frame):
