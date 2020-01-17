@@ -40,11 +40,16 @@ class MainApplication(tk.Tk):
         # Binds
         #self.bind("<Configure>", lambda e: self.configuration_happened(True))
         #self.bind('<ButtonRelease-1>', lambda e: self.resize())
+        self.bind('<Left>', lambda e: self.left_key())
+        self.bind('<Right>', lambda e: self.right_key())
 
-    #def configuration_happened(self, val):
-     #   print("XXX")
-      #  print(self.configured)
-       # self.configured = val
+    def left_key(self):
+        if self.currentframe == self.mode_dict[1][1]:
+            self.frame_sort.photosort.shift_current_image(-1)
+
+    def right_key(self):
+        if self.currentframe == self.mode_dict[1][1]:
+            self.frame_sort.photosort.shift_current_image(1)
 
     def switch_mode(self, num):
         self.mode.set(num)
@@ -92,14 +97,18 @@ class FrameModeSort(tk.Frame):
         self.photoframe.pack(fill='both', expand=1)
 
         # quickfuns
+        button_width = 20
         self.c_quickfuns = tk.Frame(self)
         self.c_quickfuns.grid(row=3, column=0)
-        self.quickfuns_button_next = tk.Button(self.c_quickfuns, text='Next')
-        self.quickfuns_button_last = tk.Button(self.c_quickfuns, text='Previous')
-        self.quickfuns_button_next.pack(expand=True)
-        self.quickfuns_button_last.pack(expand=True)
-        self.quickfuns_button_next.bind('<Button-1>', lambda e: self.button_quickfuns_next_last("next"))
+        self.quickfuns_button_last = tk.Button(self.c_quickfuns, width=button_width, text='Previous')
+        self.quickfuns_button_next = tk.Button(self.c_quickfuns, width=button_width, text='Next')
+        self.quickfuns_button_rotate = tk.Button(self.c_quickfuns, width=button_width, text='Rotate')
+        self.quickfuns_button_last.grid(row=0, column=0)
+        self.quickfuns_button_next.grid(row=0, column=1)
+        self.quickfuns_button_rotate.grid(row=0, column=3)
         self.quickfuns_button_last.bind('<Button-1>', lambda e: self.button_quickfuns_next_last("last"))
+        self.quickfuns_button_next.bind('<Button-1>', lambda e: self.button_quickfuns_next_last("next"))
+        self.quickfuns_button_rotate.bind('<Button-1>', lambda e: self.button_quickfuns_rotate_image())
 
         # work path
         self.c_workpath = tk.Frame(self)
@@ -129,6 +138,10 @@ class FrameModeSort(tk.Frame):
             self.photosort.shift_current_image(1)
         elif cmd == "last":
             self.photosort.shift_current_image(-1)
+
+    def button_quickfuns_rotate_image(self):
+        self.current_image_original = self.current_image_original.rotate(90)
+        self.set_new_image(self.current_image_original)
 
     def resize(self):
         self.current_image_resized = get_resized_image(self, self.current_image_original, self.c_photo)

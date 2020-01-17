@@ -163,7 +163,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579042692339</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="added photo shifting&#10;added first quickfunctions (previous/next)">
+      <created>1579134192240</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1579134192240</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -198,6 +205,7 @@
     <MESSAGE value="basic layout and first elements in sortmode window added" />
     <MESSAGE value="added functionality to workpath elements&#10;added phosort-logic class&#10;added functionality to select and scan working folder&#10;added functionality to access image meta data" />
     <MESSAGE value="added first photo display" />
-    <option name="LAST_COMMIT_MESSAGE" value="added first photo display" />
+    <MESSAGE value="added photo shifting&#10;added first quickfunctions (previous/next)" />
+    <option name="LAST_COMMIT_MESSAGE" value="added photo shifting&#10;added first quickfunctions (previous/next)" />
   </component>
 </project>
