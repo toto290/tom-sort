@@ -20,7 +20,6 @@ class MainApplication(tk.Tk):
         self.geometry('{}x{}'.format(str(self.width), str(self.height)))
         self.title(title)
         self.update_idletasks()
-        #self.resizable(0, 0)
 
         # GUI creation
         self.menu = Menu(self)
@@ -38,18 +37,21 @@ class MainApplication(tk.Tk):
         self.resize()
 
         # Binds
-        #self.bind("<Configure>", lambda e: self.configuration_happened(True))
-        #self.bind('<ButtonRelease-1>', lambda e: self.resize())
         self.bind('<Left>', lambda e: self.left_key())
         self.bind('<Right>', lambda e: self.right_key())
+        self.bind('<Up>', lambda e: self.up_key())
 
     def left_key(self):
         if self.currentframe == self.mode_dict[1][1]:
-            self.frame_sort.photosort.shift_current_image(-1)
+            self.frame_sort.shift_current_image(-1)
 
     def right_key(self):
         if self.currentframe == self.mode_dict[1][1]:
-            self.frame_sort.photosort.shift_current_image(1)
+            self.frame_sort.shift_current_image(1)
+
+    def up_key(self):
+        if self.currentframe == self.mode_dict[1][1]:
+            self.frame_sort.button_quickfuns_rotate_image()
 
     def switch_mode(self, num):
         self.mode.set(num)
@@ -58,14 +60,12 @@ class MainApplication(tk.Tk):
         self.mode_dict[num][1].pack(side="bottom", fill="both", expand=True)
         self.update_idletasks()
         self.currentframe = self.mode_dict[num][1]
-        self.currentframe.resize()
+        self.currentframe.on_activation()
 
     def resize(self):
         self.width = self.winfo_width()
         self.height = self.winfo_height()
-        #print('Resize: ' + str(self.width) + 'x' + str(self.height))
         self.currentframe.config(width=self.width, height=self.height)
-        self.currentframe.resize()
 
 
 class FrameModeStart(tk.Frame):
@@ -73,84 +73,146 @@ class FrameModeStart(tk.Frame):
         tk.Frame.__init__(self, root, **kwargs)
         self.root = root
 
-    def resize(self):
+    def on_activation(self):
         pass
 
 
 class FrameModeSort(tk.Frame):
     def __init__(self, root, **kwargs):
         tk.Frame.__init__(self, root, **kwargs)
-        self.photosort = PhotoSort(self)
         self.root = root
-        self.pad = 20
+
+        self.validfiles = validphototypes
+        self.photos = []
+
+        # GUI settings
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, minsize=500)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(3, minsize=60)
 
-        self.c_photo = tk.Frame(self)
-        self.c_photo.grid(row=0, column=0, rowspan=3, sticky='nsew')
-        self.c_photo.configure(bg='white', bd=5, relief='groove')
-        self.photoframe = tk.Label(self.c_photo)
-        self.current_image_original = Image.open(Path.joinpath(path_images, "girl_with_camera.png"))
-        self.resize()
-        self.photoframe.pack(fill='both', expand=1)
+        # area: display
+        self.gridcell_displayed_image = tk.Frame(self)
+        self.gridcell_displayed_image.grid(row=0, column=0, rowspan=3, sticky='nsew')
+        self.gridcell_displayed_image.configure(bg='white', bd=1, relief='solid')
+        self.frame_displayed_image = tk.Label(self.gridcell_displayed_image, bg=colourdict[1])
+        self.displayed_image = Photo(path_images, "girl_with_camera.png")
+        self.frame_displayed_image.pack(fill='both', expand=1)
+        self.set_displayed_image(self.displayed_image)
 
-        # quickfuns
-        button_width = 20
-        self.c_quickfuns = tk.Frame(self)
-        self.c_quickfuns.grid(row=3, column=0)
-        self.quickfuns_button_last = tk.Button(self.c_quickfuns, width=button_width, text='Previous')
-        self.quickfuns_button_next = tk.Button(self.c_quickfuns, width=button_width, text='Next')
-        self.quickfuns_button_rotate = tk.Button(self.c_quickfuns, width=button_width, text='Rotate')
-        self.quickfuns_button_last.grid(row=0, column=0)
-        self.quickfuns_button_next.grid(row=0, column=1)
-        self.quickfuns_button_rotate.grid(row=0, column=3)
-        self.quickfuns_button_last.bind('<Button-1>', lambda e: self.button_quickfuns_next_last("last"))
-        self.quickfuns_button_next.bind('<Button-1>', lambda e: self.button_quickfuns_next_last("next"))
-        self.quickfuns_button_rotate.bind('<Button-1>', lambda e: self.button_quickfuns_rotate_image())
+        # area: quickfuns
+        self.gridcell_quickfuns = tk.Frame(self)
+        self.gridcell_quickfuns.grid(row=3, column=0)
+        self.quickfuns = [[0, 'Previous', lambda e: self.button_quickfuns_next_last("last")],
+                          [1, 'Next', lambda e: self.button_quickfuns_next_last("next")],
+                          [2, 'Rotate', lambda e: self.button_quickfuns_rotate_image()]]
+        self.quickfun_buttons = []
+        for fun in self.quickfuns:
+            self.quickfun_buttons.append(self.prepare_quickfun_element(fun[0], fun[1], fun[2]))
 
-        # work path
-        self.c_workpath = tk.Frame(self)
-        self.c_workpath.grid(row=0, column=1, sticky='nwe', pady=self.pad, padx=self.pad)
-        self.workpath_label = tk.Label(self.c_workpath, text=self.photosort.workfolder, relief='sunken')
-        self.workpath_button = tk.Button(self.c_workpath, text='change')
+        # area: workpath
+        pad_wf = 20
+        self.gridcell_workpath = tk.Frame(self)
+        self.gridcell_workpath.grid(row=0, column=1, sticky='nwe', pady=pad_wf, padx=pad_wf)
+        self.workfolder = Path("empty")
+        self.workpath_label = tk.Label(self.gridcell_workpath, text=self.workfolder, relief='sunken')
+        self.workpath_button = tk.Button(self.gridcell_workpath, text='change', relief="raised")
         self.workpath_label.pack(side='left', expand=True)
         self.workpath_button.pack(side='right')
-        self.workpath_button.bind('<Button-1>', lambda e: self.button_workpath())
+        self.workpath_button.bind('<Button-1>', lambda e: self.button_set_workpath())
+        self.workpath_label.configure(text=str(self.workfolder))
 
-        # meta data
-        self.c_metadata = tk.Frame(self)
-        self.c_metadata.grid(row=1, column=1)
+        # area: metadata
+        pad_md = 20
+        self.gridcell_metadata = tk.Frame(self, pady=pad_md, padx=pad_md, bg=colourdict[3])
+        self.gridcell_metadata.grid(row=1, column=1, sticky="nesw")
+        self.frame_metadata = tk.Frame(self.gridcell_metadata)
+        #self.metadata_elements = {'oldname': (None, 0, 'old name'),
+         #                         'newname': (None, 1, 'new name'),
+          #                        'date': (None, 2, 'date'),
+           #                       'reso': (None, 3, 'resolution')}
 
-        self.c_tags = tk.Frame(self)
-        self.c_tags.grid(row=2, column=1)
+        #for md in self.metadata_elements.keys():
+         #   entries = self.metadata_elements[md]
+          #  print(self.metadata_elements.[md][0]) #= self.prepare_metadata_element(entries[1], entries[2])[1]
 
-        self.c_newtag = tk.Frame(self)
-        self.c_newtag.grid(row=3, column=1)
+        self.label_identifier_oldname, self.label_content_oldname = self.prepare_metadata_element(0, "old name")
+        self.label_identifier_newname, self.label_content_newname = self.prepare_metadata_element(1, "newname")
+        self.label_identifier_date, self.label_content_date = self.prepare_metadata_element(2, "date")
+        self.label_identifier_reso, self.label_content_reso = self.prepare_metadata_element(3, "resolution")
+        self.label_identifier_test, self.label_content_test = self.prepare_metadata_element(4, "xxx")
+        self.frame_metadata.columnconfigure(1, weight=5)
+        self.frame_metadata.pack(fill="both", expand=True, side="left")
 
-    def button_workpath(self):
-        self.photosort.set_workfolder(tk.filedialog.askdirectory())
-        self.workpath_label.configure(text=self.photosort.get_workfolder())
+        # area: tags
+        self.gridcell_tags = tk.Frame(self)
+        self.gridcell_tags.grid(row=2, column=1)
+
+    def prepare_quickfun_element(self, col, txt, fun):
+        button_width = 20
+        button_color = colourdict[1]
+        font_color = colourdict[6]
+        font_size = 8
+        button = tk.Button(self.gridcell_quickfuns, width=button_width, text=txt)
+        button.configure(bg=button_color, fg=font_color, font=font_size)
+        button.grid(row=0, column=col)
+        button.bind('<Button-1>', fun)
+        return button
+
+    def prepare_metadata_element(self, row, txt):
+        button_color = colourdict[1]
+        font_color = colourdict[6]
+        ident = tk.Label(self.frame_metadata, text=txt, bg=button_color, fg=font_color, relief='groove')
+        ident.grid(row=row, column=0, sticky="we")
+        cont = tk.Label(self.frame_metadata, relief='groove', text="empty", bg=button_color, fg=font_color)
+        cont.grid(row=row, column=1, sticky="we")
+        return [ident, cont]
+
+    def on_activation(self):
+        self.set_displayed_image(self.displayed_image)
+
+    def button_set_workpath(self):
+        path = Path(tk.filedialog.askdirectory())
+        self.workfolder = path
+        self.workpath_label.configure(text=str(path))
+        self.photos = self.scan_folder(path)
+        self.set_displayed_image(self.photos[0])
+
+    def scan_folder(self, path):
+        files = os.listdir(path)
+        photolist = []
+        for img in files:
+            if os.path.splitext(img)[1] in self.validfiles:
+                photolist.append(Photo(path, img))
+        return photolist
+
+    def set_displayed_image(self, img):
+        self.displayed_image = img
+        image = get_resized_image(img.image, self.gridcell_displayed_image)
+        image = ImageTk.PhotoImage(image)
+        self.frame_displayed_image.config(image=image)
+        self.frame_displayed_image.image = image
 
     def button_quickfuns_next_last(self, cmd):
         if cmd == "next":
-            self.photosort.shift_current_image(1)
+            self.shift_current_image(1)
         elif cmd == "last":
-            self.photosort.shift_current_image(-1)
+            self.shift_current_image(-1)
+
+    def shift_current_image(self, dn):
+        if self.displayed_image in self.photos:
+            old_n = self.photos.index(self.displayed_image)
+            new_n = old_n + dn
+            if new_n < 0:
+                new_n = len(self.photos) - 1
+            elif new_n > len(self.photos) - 1:
+                new_n = 0
+            self.set_displayed_image(self.photos[new_n])
 
     def button_quickfuns_rotate_image(self):
-        self.current_image_original = self.current_image_original.rotate(90)
-        self.set_new_image(self.current_image_original)
-
-    def resize(self):
-        self.current_image_resized = get_resized_image(self, self.current_image_original, self.c_photo)
-        self.current_photoimage = ImageTk.PhotoImage(self.current_image_resized)
-        self.photoframe.config(image=self.current_photoimage)
-
-    def set_new_image(self, image):
-        self.current_image_original = image
-        self.resize()
+        if self.displayed_image in self.photos:
+            self.displayed_image.rotate()
+            self.set_displayed_image(self.displayed_image)
 
 
 class FrameModeTwin(tk.Frame):
@@ -158,7 +220,7 @@ class FrameModeTwin(tk.Frame):
         tk.Frame.__init__(self, root, **kwargs)
         self.root = root
 
-    def resize(self):
+    def on_activation(self):
         pass
 
 
@@ -189,71 +251,26 @@ class Status(tk.Frame):
         self.status.pack(side='bottom', fill='x')
 
 
-# ===== Logic Modules =====
-class PhotoSort:
-    def __init__(self, root):
-        self.root = root
-        self.workfolder = Path("empty")
-        self.validfiles = validfototypes
-        self.photos = []
-        self.n = 0
-
-    def set_workfolder(self, wf):
-        self.workfolder = Path(wf)
-        print("PhotoSort: workfolder changed to " + wf)
-        self.scan_folder()
-
-    def get_workfolder(self):
-        return str(self.workfolder)
-
-    def scan_folder(self):
-        self.n = 0
-        files = os.listdir(self.workfolder)
-        print("files:" + str(files))
-        photolist = []
-        for img_name in files:
-            if os.path.splitext(img_name)[1] in self.validfiles:
-                photolist.append(Photo(img_name))
-        self.photos = photolist
-        #self.print_photo_overview(self.n)
-        self.set_current_image(self.n)
-
-    def print_photo_overview(self, n):
-        print("name: " + str(self.photos[n].oldname))
-        print("path: " + str(self.photos[n].path))
-        print("date: " + str(self.photos[n].date))
-        print("tags: " + str(self.photos[n].tags))
-        print("reso: " + str(self.photos[n].reso))
-
-    def set_current_image(self, n):
-        image = Image.open(Path.joinpath(self.workfolder, self.photos[n].oldname))
-        self.root.set_new_image(image)
-
-    def shift_current_image(self, dn):
-        print(self.photos)
-        new_n = self.n + dn
-        if new_n < 0:
-            self.n = len(self.photos)-1
-        elif new_n > len(self.photos)-1:
-            self.n = 0
-        else:
-            self.n += dn
-        self.set_current_image(self.n)
-
-
 class Photo:
-    def __init__(self, img):
+    def __init__(self, path, img):
         self.oldname = img
-        self.path = Path.joinpath(app.frame_sort.photosort.workfolder, self.oldname)
+        self.path = Path.joinpath(path, img)
         self.date = datetime.datetime.fromtimestamp(self.path.stat().st_mtime)
         self.tags = []
-        im = Image.open(self.path)
-        self.x, self.y = im.size
+        self.image = Image.open(self.path)
+        self.x, self.y = self.image.size
         self.reso = '{}x{}'.format(self.x, self.y)
+        self.rotation = 0
+
+    def rotate(self):
+        self.rotation += 1
+        if self.rotation >= 4:
+            self.rotation = 0
+        self.image = self.image.rotate(90, expand=True)
 
 
 # ===== Static Functions =====
-def get_resized_image(self, image, widget):
+def get_resized_image(image, widget):
     x_i, y_i = image.size
     x_w, y_w = widget.winfo_width(), widget.winfo_height()
     ratio_i = x_i/y_i
@@ -266,8 +283,8 @@ def get_resized_image(self, image, widget):
 
 
 # ===== Global Vars =====
-colourdict = {0: '#FFFFFF', 1: '#354668', 2: '#27334A', 3: '#1C2536', 4: '#121926', 5: '#0B0F17'}
-validfototypes = ['.jpg', '.JPG', '.png', '.PNG']
+colourdict = {0: '#FFFFFF', 1: '#354668', 2: '#27334A', 3: '#1C2536', 4: '#121926', 5: '#0B0F17', 6: '#F48211'}
+validphototypes = ['.jpg', '.JPG', '.png', '.PNG']
 path_images = Path(r"C:\Users\tomod\OneDrive\06 Programmierung\01 Python\01 Projekte\TomSort\images")
 
 # ===== Program =====
