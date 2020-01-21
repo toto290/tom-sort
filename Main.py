@@ -127,20 +127,20 @@ class FrameModeSort(tk.Frame):
         self.gridcell_metadata = tk.Frame(self, pady=pad_md, padx=pad_md, bg=colourdict[3])
         self.gridcell_metadata.grid(row=1, column=1, sticky="nesw")
         self.frame_metadata = tk.Frame(self.gridcell_metadata)
-        #self.metadata_elements = {'oldname': (None, 0, 'old name'),
-         #                         'newname': (None, 1, 'new name'),
-          #                        'date': (None, 2, 'date'),
-           #                       'reso': (None, 3, 'resolution')}
 
-        #for md in self.metadata_elements.keys():
-         #   entries = self.metadata_elements[md]
-          #  print(self.metadata_elements.[md][0]) #= self.prepare_metadata_element(entries[1], entries[2])[1]
+        self.metadata_dict = {'oldname': ([0, 'old name', None]),
+                              'newname': ([1, 'new name', None]),
+                              'date': ([2, 'date', None]),
+                              'reso': ([3, 'resolution', None])}
 
-        self.label_identifier_oldname, self.label_content_oldname = self.prepare_metadata_element(0, "old name")
-        self.label_identifier_newname, self.label_content_newname = self.prepare_metadata_element(1, "newname")
-        self.label_identifier_date, self.label_content_date = self.prepare_metadata_element(2, "date")
-        self.label_identifier_reso, self.label_content_reso = self.prepare_metadata_element(3, "resolution")
-        self.label_identifier_test, self.label_content_test = self.prepare_metadata_element(4, "xxx")
+        for md_key in self.metadata_dict.keys():
+            self.metadata_dict[md_key][2] = self.prepare_metadata_element(self.metadata_dict[md_key])
+
+        #self.label_identifier_oldname, self.label_content_oldname = self.prepare_metadata_element(0, "old name")
+        #self.label_identifier_newname, self.label_content_newname = self.prepare_metadata_element(1, "newname")
+        #self.label_identifier_date, self.label_content_date = self.prepare_metadata_element(2, "date")
+        #self.label_identifier_reso, self.label_content_reso = self.prepare_metadata_element(3, "resolution")
+        #self.label_identifier_test, self.label_content_test = self.prepare_metadata_element(4, "xxx")
         self.frame_metadata.columnconfigure(1, weight=5)
         self.frame_metadata.pack(fill="both", expand=True, side="left")
 
@@ -159,12 +159,14 @@ class FrameModeSort(tk.Frame):
         button.bind('<Button-1>', fun)
         return button
 
-    def prepare_metadata_element(self, row, txt):
+    def prepare_metadata_element(self, md_info):
         button_color = colourdict[1]
         font_color = colourdict[6]
+        row = md_info[0]
+        txt = md_info[1]
         ident = tk.Label(self.frame_metadata, text=txt, bg=button_color, fg=font_color, relief='groove')
         ident.grid(row=row, column=0, sticky="we")
-        cont = tk.Label(self.frame_metadata, relief='groove', text="empty", bg=button_color, fg=font_color)
+        cont = tk.Label(self.frame_metadata, relief='groove', text='empty', bg=button_color, fg=font_color)
         cont.grid(row=row, column=1, sticky="we")
         return [ident, cont]
 
@@ -192,6 +194,12 @@ class FrameModeSort(tk.Frame):
         image = ImageTk.PhotoImage(image)
         self.frame_displayed_image.config(image=image)
         self.frame_displayed_image.image = image
+
+        if img in self.photos:
+            self.metadata_dict['oldname'][2][1].config(text=img.oldname)
+            self.metadata_dict['newname'][2][1].config(text='?')
+            self.metadata_dict['date'][2][1].config(text=img.date)
+            self.metadata_dict['reso'][2][1].config(text=img.reso)
 
     def button_quickfuns_next_last(self, cmd):
         if cmd == "next":
