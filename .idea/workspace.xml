@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="81df7d1a-6f9a-4e57-812e-03cb76aad3f0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Styles.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/FotoSort.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FotoSort.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -34,7 +35,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
     <configuration name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -44,7 +45,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\tomod\.conda\envs\beamerprojection\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\Tom\anaconda3\envs\py38_tom-sort\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -64,6 +65,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -218,31 +220,5 @@
     <MESSAGE value="added arrowkey based image scrolling&#10;added (buggy) &quot;rotate&quot; button" />
     <MESSAGE value="tidied up the code&#10;implemented first metadata displays" />
     <option name="LAST_COMMIT_MESSAGE" value="tidied up the code&#10;implemented first metadata displays" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state width="1899" height="283" key="GridCell.Tab.0.bottom" timestamp="1596662161977">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="283" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596662161977" />
-    <state width="1899" height="283" key="GridCell.Tab.0.center" timestamp="1596662161977">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="283" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596662161977" />
-    <state width="1899" height="283" key="GridCell.Tab.0.left" timestamp="1596662161977">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="283" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596662161977" />
-    <state width="1899" height="283" key="GridCell.Tab.0.right" timestamp="1596662161977">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="283" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596662161977" />
-    <state x="803" y="292" key="refactoring.ChangeSignatureDialog" timestamp="1596661782149">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="803" y="292" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596661782149" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1596661354133">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596661354133" />
   </component>
 </project>
