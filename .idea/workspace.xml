@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="81df7d1a-6f9a-4e57-812e-03cb76aad3f0" name="Default Changelist" comment="made code run again, made seperate styles file">
-      <change afterPath="$PROJECT_DIR$/date_time_lib.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/debug_utilities_lib.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
+    <list default="true" id="81df7d1a-6f9a-4e57-812e-03cb76aad3f0" name="Default Changelist" comment="started creating view subclasses for easier reuse">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Styles.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/girl_with_camera.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/default_placeholder.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,7 +231,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616939635338</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="started creating view subclasses for easier reuse">
+      <created>1616975857159</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1616975857159</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -273,7 +276,8 @@
     <MESSAGE value="added arrowkey based image scrolling&#10;added (buggy) &quot;rotate&quot; button" />
     <MESSAGE value="tidied up the code&#10;implemented first metadata displays" />
     <MESSAGE value="made code run again, made seperate styles file" />
-    <option name="LAST_COMMIT_MESSAGE" value="made code run again, made seperate styles file" />
+    <MESSAGE value="started creating view subclasses for easier reuse" />
+    <option name="LAST_COMMIT_MESSAGE" value="started creating view subclasses for easier reuse" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -4,7 +4,8 @@ from debug_utilities_lib import *
 
 
 class Settings:
-    default_image = None
+    images = {'placeholder': 'default_placeholder',
+              'welcome_screen': 'start_background'}
     valid_image_types = ['.jpg', '.JPG', '.png', '.PNG']
 
     # Paths
@@ -16,12 +17,15 @@ class Styles:
     colors = {'background': '#121212',
               'widget_bg': '#1f2933',
               'font': '#ffffff',
-              'widget_fg': '#323f4b'}
+              'widget_fg': '#323f4b',
+              'logo_tom': '#17c745'}
+    fontsizes = {'s': 8, 'm': 14, 'l': 20, 'logo': 180, 'slogan': 70}
+    font = {'default': 'Candara',
+            'tom': 'Candara',
+            'slogan': 'Brush Script MT'}
 
 
 if __name__ == '__main__':
-    debug(Settings.default_placeholder_img_path)
-
     class Xy:
         def __init__(self):
             self.a = 1

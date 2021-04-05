@@ -36,25 +36,18 @@ class App(tk.Tk):
                           'Tag': TagView(self),
                           'Twin': TwinView(self)}
 
-        # GUI initialization
         self.currentframe = self.mode_dict[self.mode.get()]
-        self.status.statustext.set(str(self.mode.get()) + '-Mode')
-        self.currentframe.pack()
-        self.update_idletasks()
-        self.resize()
-
-        # Binds
-        self.bind_keys()
+        self.switch_mode('Start')
 
     def switch_mode(self, mode_name):
         self.mode.set(mode_name)
         self.status.statustext.set(mode_name + '-Mode')
         self.currentframe.pack_forget()
-        self.mode_dict[mode_name].pack(side="bottom", fill="both", expand=True)
-        self.update_idletasks()
         self.currentframe = self.mode_dict[mode_name]
+        self.currentframe.pack(side="bottom", fill="both", expand=True)
         self.currentframe.on_activation()
         self.bind_keys()
+        self.update_idletasks()
 
     def resize(self):
         self.width = self.winfo_width()
@@ -89,6 +82,21 @@ class View(tk.Frame):
     def on_activation(self):
         pass
 
+    class LogoBox(tk.Frame):
+        def __init__(self, root, **kwargs):
+            tk.Frame.__init__(self, root, **kwargs)
+            self.root = root
+            bg = Styles.colors['background']
+            self.configure(bg=bg)
+            tom_label = tk.Label(self, text='TOM', font=(Styles.font['tom'], Styles.fontsizes['logo']),
+                                 fg=Styles.colors['logo_tom'], bg=bg)
+            tom_label.grid(row=0)
+            slogan_label = tk.Label(self, text='Tidily Organized Media',
+                                    font=(Styles.font['slogan'], Styles.fontsizes['slogan']),
+                                    fg=Styles.colors['font'], bg=bg)
+
+            slogan_label.grid(row=1)
+
     class ImageDisplayBox(tk.Frame):
         def __init__(self, root, **kwargs):
             tk.Frame.__init__(self, root, **kwargs)
@@ -109,17 +117,19 @@ class View(tk.Frame):
         pass  # TODO
 
     class PathSelectionBox(tk.Frame):
-        def __init__(self, root, callback_function, default_text='empty', **kwargs):
+        def __init__(self, root, callback_function, default_text='empty', fontsize='m', **kwargs):
             tk.Frame.__init__(self, root, **kwargs)
+            font = (Styles.font['default'], Styles.fontsizes[fontsize])
+            fg = Styles.colors['font']
+            bg1 = Styles.colors['widget_fg']
+            bg2 = Styles.colors['widget_bg']
             self.workfolder = None
             self.callback_function = callback_function
             self.root = root
             self.configure(bg=Styles.colors['widget_bg'])
-            self.workpath_label = tk.Label(self, text=default_text, bg=Styles.colors['widget_bg'],
-                                           fg=Styles.colors['font'])
+            self.workpath_label = tk.Label(self, text=default_text, bg=bg2, fg=fg, font=font)
             self.workpath_label.grid(column=0, row=0, sticky='EW')
-            self.workpath_button = tk.Button(self, text='change', relief="raised", bg=Styles.colors['widget_fg'],
-                                             fg=Styles.colors['font'])
+            self.workpath_button = tk.Button(self, text='change', relief="raised", bg=bg1, fg=fg, font=font)
             self.workpath_button.grid(column=1, row=0)
             self.workpath_button.bind('<Button-1>', lambda e: self.button_set_workpath())
             self.columnconfigure(0, weight=1)
@@ -138,13 +148,23 @@ class StartView(View):
     def __init__(self, root, **kwargs):
         View.__init__(self, root, **kwargs)
 
-        path_selection_box = View.PathSelectionBox(self, self.on_path_selection, 'no archive was selected')
-        path_selection_box.grid(row=1, column=0, sticky='new', pady=int(root.height/3), padx=20)
+        logo = View.LogoBox(self)
+        logo.grid(row=0)
+
+        welcome_text = 'Please select your project folder, where you want to sort you images'
+        text_label = tk.Label(self, text=welcome_text, bg=Styles.colors['background'], fg=Styles.colors['font'],
+                              font=(Styles.font['default'], Styles.fontsizes['l']))
+        text_label.grid(row=1, column=0, sticky='NESW')
+
+
+        path_selection_box = View.PathSelectionBox(self, self.on_path_selection, default_text='empty', fontsize='l')
+        path_selection_box.grid(row=2, column=0, sticky='nesw', pady=20, padx=int(root.width/4))
 
         # GUI settings
-        self.columnconfigure(0, weight=1, minsize=int(root.width/2))
+        self.columnconfigure(0, weight=1, minsize=800)
         self.rowconfigure(0, weight=1)
-        self.rowconfigure(1, minsize=60)
+        self.rowconfigure(1, minsize=1)
+        self.rowconfigure(2, minsize=1)
 
     def on_path_selection(self, path):
         debug('test')
@@ -207,7 +227,7 @@ class SortView(View):
         button_width = 20
         button_color = Styles.colors['widget_fg']
         font_color = Styles.colors['font']
-        font_size = 8
+        font_size = Styles.fontsizes['m']
         button = tk.Button(self.gridcell_quickfuns, width=button_width, text=txt)
         button.configure(bg=button_color, fg=font_color, font=font_size)
         button.grid(row=0, column=col)
